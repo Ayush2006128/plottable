@@ -46,7 +46,7 @@ export function EquationPanel({ equations, onChange }: Props) {
         <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
           Plottable
         </div>
-        <h1 className="mt-1 font-display text-xl font-semibold tracking-tight">
+        <h1 className="mt-1 font-sans text-xl font-semibold tracking-tight">
           Graphing Calculator
         </h1>
       </div>
