@@ -1,6 +1,7 @@
 import { Eye, EyeOff, Plus, X } from "lucide-react";
 import { useState } from "react";
 import type { Equation } from "./Graph";
+import { TooltipProvider, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 interface Props {
   equations: Equation[];
@@ -60,7 +61,9 @@ export function EquationPanel({ equations, onChange }: Props) {
             <div className="flex items-start gap-3">
               <div className="relative flex flex-col items-center gap-2 pt-1">
                 <button
-                  onClick={() => setOpenPicker(openPicker === eq.id ? null : eq.id)}
+                  onClick={() =>
+                    setOpenPicker(openPicker === eq.id ? null : eq.id)
+                  }
                   className="h-3 w-3 shrink-0 rounded-full ring-2 ring-offset-2 ring-offset-card transition-transform hover:scale-125"
                   style={{
                     backgroundColor: `var(${eq.color})`,
@@ -121,20 +124,36 @@ export function EquationPanel({ equations, onChange }: Props) {
               </div>
 
               <div className="flex items-center gap-1 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
-                <button
-                  onClick={() => update(eq.id, { visible: !eq.visible })}
-                  className="rounded p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground"
-                  title={eq.visible ? "Hide" : "Show"}
-                >
-                  {eq.visible ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
-                </button>
-                <button
-                  onClick={() => remove(eq.id)}
-                  className="rounded p-1.5 text-muted-foreground hover:bg-secondary hover:text-destructive"
-                  title="Remove"
-                >
-                  <X className="h-3.5 w-3.5" />
-                </button>
+                <TooltipProvider>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => update(eq.id, { visible: !eq.visible })}
+                      className="rounded p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground"
+                      title={eq.visible ? "Hide" : "Show"}
+                    >
+                      {eq.visible ? (
+                        <Eye className="h-3.5 w-3.5" />
+                      ) : (
+                        <EyeOff className="h-3.5 w-3.5" />
+                      )}
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Hide from graph</p>
+                  </TooltipContent>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => remove(eq.id)}
+                      className="rounded p-1.5 text-muted-foreground hover:bg-secondary hover:text-destructive"
+                      title="Remove"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Remove from graph</p>
+                  </TooltipContent>
+                </TooltipProvider>
               </div>
             </div>
           </div>
@@ -154,13 +173,30 @@ export function EquationPanel({ equations, onChange }: Props) {
           Syntax
         </div>
         <div className="mt-2 space-y-1 font-mono text-[11px] text-muted-foreground">
-          <div><span className="text-foreground">sin(x)</span> cos tan log sqrt</div>
-          <div><span className="text-foreground">x^2</span> · <span className="text-foreground">2x</span> · <span className="text-foreground">pi</span> · <span className="text-foreground">e</span></div>
-          <div><span className="text-foreground">abs(x)</span> · <span className="text-foreground">exp(x)</span> · <span className="text-foreground">x!</span></div>
+          <div>
+            <span className="text-foreground">sin(x)</span> cos tan log sqrt
+          </div>
+          <div>
+            <span className="text-foreground">x^2</span> ·{" "}
+            <span className="text-foreground">2x</span> ·{" "}
+            <span className="text-foreground">pi</span> ·{" "}
+            <span className="text-foreground">e</span>
+          </div>
+          <div>
+            <span className="text-foreground">abs(x)</span> ·{" "}
+            <span className="text-foreground">exp(x)</span> ·{" "}
+            <span className="text-foreground">x!</span>
+          </div>
           <div className="pt-1 text-foreground">shapes</div>
-          <div><span className="text-foreground">x^2 + y^2 = 9</span> circle</div>
-          <div><span className="text-foreground">x^2/4 + y^2 = 1</span> ellipse</div>
-          <div className="pt-1 text-[10px] opacity-70">tip: use y to plot implicit shapes</div>
+          <div>
+            <span className="text-foreground">x^2 + y^2 = 9</span> circle
+          </div>
+          <div>
+            <span className="text-foreground">x^2/4 + y^2 = 1</span> ellipse
+          </div>
+          <div className="pt-1 text-[10px] opacity-70">
+            tip: use y to plot implicit shapes
+          </div>
         </div>
       </div>
     </div>
